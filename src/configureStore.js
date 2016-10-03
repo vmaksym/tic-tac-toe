@@ -1,4 +1,4 @@
-import { makeRootReducer } from './reducers'
+import { makeRootReducer } from './reducers/Reducers'
 import { createStore } from 'redux'
 import {loadState, saveState} from './localStorage'
 import throttle from  'lodash/throttle'

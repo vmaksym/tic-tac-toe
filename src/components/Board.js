@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Cell from './Cell'
-import { toggleBoard } from './Actions'
+import { toggleBoard } from '../actions/Actions'
 
 let Board = ({
     board,

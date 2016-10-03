@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { startNewGame } from './Actions'
+import { startNewGame } from '../actions/Actions'
 
 const mapStateToPayerStatus = (state) => ({
         player: state.player,
