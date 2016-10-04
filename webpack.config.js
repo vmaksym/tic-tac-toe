@@ -1,8 +1,8 @@
 module.exports = {
-    entry: './index.js',
+    entry: './src/index.js',
     output: {
         path: '__dirname/build',
-        filename: 'index.js'
+        filename: 'app.js'
     },
     devServer: {
         inline: true,
