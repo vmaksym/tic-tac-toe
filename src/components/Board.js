@@ -23,13 +23,9 @@ const mapStateToCellProps = (state) => ({
     winner: state.winner
 });
 
-const mapDispatchToCellProps = (dispatch) => ({
-    onCellClick: (board, x, y, value) => dispatch(toggleBoard(board, x, y, value))
-});
-
 Board = connect(
     mapStateToCellProps,
-    mapDispatchToCellProps
+    {onCellClick: toggleBoard}
 )(Board);
 
 export default Board
