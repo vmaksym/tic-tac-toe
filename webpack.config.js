@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 module.exports = {
     entry: './src/index.js',
     output: {
@@ -8,6 +9,13 @@ module.exports = {
         inline: true,
         port: 3333
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': '"dev"'
+            }
+        })
+    ],
     module: {
         loaders: [
             {
@@ -20,4 +28,4 @@ module.exports = {
             }
         ]
     }
-}
+};
