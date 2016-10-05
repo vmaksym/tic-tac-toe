@@ -1,44 +1,22 @@
 import { makeRootReducer } from './reducers/Reducers'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import {loadState, saveState} from './localStorage'
 import throttle from  'lodash/throttle'
-
-const addLoggingToDispatch = (store) => {
-    const rawDispatch = store.dispatch;
-    if (!console.group) {
-        return rawDispatch;
-    }
-
-    return (action) => {
-        console.group(action.type);
-        console.log('%c prev state', 'color: gray', store.getState());
-        console.log('%c action', 'color: blue', action);
-        const returnVal = rawDispatch(action);
-        console.log('%c next state', 'color: green', store.getState());
-        console.groupEnd(action.type);
-        return returnVal;
-    };
-};
-
-const addPromiseSupportToDispatch = (store) => {
-    const rawDispatch = store.dispatch;
-    return (action) => {
-        if (typeof action.then === 'function') {
-            return action.then(rawDispatch);
-        }
-        return rawDispatch(action);
-    }
-};
+import promise from 'redux-promise'
+import createLogger from 'redux-logger'
 
 const configureStore = () => {
-    const serializedState = loadState();
-    const store = createStore(makeRootReducer(), serializedState);
-
+    let middlewares = [promise];
     if (process.env.NODE_ENV !== 'production') {
-        store.dispatch = addLoggingToDispatch(store);
+        middlewares.push(createLogger());
     }
 
-    store.dispatch = addPromiseSupportToDispatch(store);
+    const serializedState = loadState();
+    const store = createStore(
+        makeRootReducer(),
+        serializedState,
+        applyMiddleware(...middlewares)
+    );
 
     store.subscribe(throttle(() => {
         saveState(store.getState());
