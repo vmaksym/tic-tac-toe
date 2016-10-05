@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Cell from './Cell'
-import { toggleBoard } from '../actions/Actions'
+import * as actions from '../actions'
 
-let Board = ({
-    board,
-    player,
-    winner,
-    onCellClick
-}) => (
-    <div className="board"> {
-        board.map(row =>
-            row.items.map( cell =>
-                <Cell key={cell.id} readOnly={cell.value !== '' || winner !== ''} text={cell.value} player={player}
-                      onClick={() => onCellClick(board, row.id, cell.id, player)} />))
-    }</div>
-);
+class Board extends Component {
+    componentDidMount() {
+        const {fetchBoard} = this.props;
+        fetchBoard();
+    }
+
+    render() {
+        const {board,player, winner, toggleBoard} = this.props;
+        return (
+            <div className="board"> {
+                board.map(row =>
+                    row.items.map( cell =>
+                        <Cell key={cell.id} readOnly={cell.value !== '' || winner !== ''} text={cell.value} player={player}
+                              onClick={() => toggleBoard(board, row.id, cell.id, player)} />))
+            }
+            </div>
+        );
+    }
+}
 
 const mapStateToCellProps = (state) => ({
     board: state.board,
@@ -25,7 +31,7 @@ const mapStateToCellProps = (state) => ({
 
 Board = connect(
     mapStateToCellProps,
-    {onCellClick: toggleBoard}
+    actions
 )(Board);
 
 export default Board
