@@ -1,14 +1,20 @@
 import * as api from '../api'
 
-const receiveBoard = (board) => ({
+const receiveBoard = (response) => ({
     type: 'RECEIVE_BOARD',
-    board
+    response
 });
 
-export const fetchBoard = () =>
-    api.fetchBoard().then(board =>
-        receiveBoard(board)
+const requestBoard = () => ({
+    type: 'REQUEST_BOARD'
+});
+
+export const fetchBoard = () => (dispatch) => {
+    dispatch(requestBoard());
+    api.fetchBoard().then(response =>
+        dispatch(receiveBoard(response))
     );
+};
 
 export const toggleBoard = (board, x, y, value) => ({
     type: 'TOGGLE_BOARD',

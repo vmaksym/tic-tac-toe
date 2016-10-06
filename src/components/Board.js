@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Cell from './Cell'
 import * as actions from '../actions'
+import { getIsFetching } from '../reducers'
 
 class Board extends Component {
     componentDidMount() {
@@ -10,7 +11,10 @@ class Board extends Component {
     }
 
     render() {
-        const {board,player, winner, toggleBoard} = this.props;
+        const {board, player, winner, toggleBoard, isFetching} = this.props;
+        if (isFetching && !board.length) {
+            return <p>Loading...</p>
+        }
         return (
             <div className="board"> {
                 board.map(row =>
@@ -23,14 +27,15 @@ class Board extends Component {
     }
 }
 
-const mapStateToCellProps = (state) => ({
-    board: state.board,
+const mapStateToProps = (state) => ({
+    board: state.board.data,
     player: state.player,
-    winner: state.winner
+    winner: state.winner,
+    isFetching: getIsFetching(state)
 });
 
 Board = connect(
-    mapStateToCellProps,
+    mapStateToProps,
     actions
 )(Board);
 

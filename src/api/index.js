@@ -8,10 +8,12 @@ const fakeDatabase = {
     }],
 };
 
+const latency = 1000;
+
 const delay = (ms) =>
     new Promise(resolve => setTimeout(resolve, ms));
 
 export const fetchBoard = () =>
-    delay(500).then(() => {
+    delay(latency).then(() => {
         return fakeDatabase.board
     });
