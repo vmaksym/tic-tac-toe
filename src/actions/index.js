@@ -1,28 +1,35 @@
 import * as api from '../api'
 
-const receiveBoard = (response) => ({
-    type: 'RECEIVE_BOARD',
-    response
-});
-
-const requestBoard = () => ({
-    type: 'REQUEST_BOARD'
-});
-
 export const fetchBoard = () => (dispatch) => {
-    dispatch(requestBoard());
-    api.fetchBoard().then(response =>
-        dispatch(receiveBoard(response))
+    dispatch({
+        type: 'FETCH_BOARD_REQUEST'
+    });
+    api.fetchBoard().then(
+        response => {
+            dispatch({
+                type: 'FETCH_BOARD_SUCCESS',
+                response
+            })
+        },
+        error => {
+            dispatch({
+                type: 'FETCH_BOARD_FAILURE',
+                message: error.message
+            })
+        }
     );
 };
 
-export const toggleBoard = (board, x, y, value) => ({
-    type: 'TOGGLE_BOARD',
-    board,
-    y,
-    x,
-    value
-});
+export const toggleBoard = (x, y, value) => (dispatch) => {
+    api.toggleBoard(x, y, value).then(
+        response => {
+            dispatch({
+                type: 'TOGGLE_BOARD_SUCCESS',
+                response
+            })
+        }
+    );
+};
 
 export const startNewGame = () => ({
     type: 'NEW_BOARD'
