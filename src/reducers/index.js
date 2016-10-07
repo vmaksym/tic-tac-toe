@@ -12,4 +12,7 @@ const makeRootReducer = () => combineReducers({
 export const getIsFetching = (state) =>
     fromBoard.getIsFetching(state.board);
 
+export const getErrorMessage = (state) =>
+    fromBoard.getErrorMessage(state.board);
+
 export default makeRootReducer

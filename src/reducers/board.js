@@ -13,7 +13,7 @@ const newBoard = () => {
 const boardCell = (state = {}, action) => {
     switch (action.type) {
         case 'TOGGLE_BOARD':
-            return Object.assign({}, state, {value: action.value});
+            return Object.assign({}, state, {value: action.response.value});
         default:
             return state;
     }
@@ -22,7 +22,7 @@ const boardRow = (state = {}, action) => {
     switch (action.type) {
         case 'TOGGLE_BOARD':
             return Object.assign({}, state, {
-                items: state.items.map(cell => cell.id === action.y ? boardCell(cell, action) : cell)
+                items: state.items.map(cell => cell.id === action.response.y ? boardCell(cell, action) : cell)
             });
         default:
             return state;
@@ -31,10 +31,10 @@ const boardRow = (state = {}, action) => {
 
 export const board = (state = [], action) => {
     switch (action.type) {
-        case 'RECEIVE_BOARD':
+        case 'FETCH_BOARD_SUCCESS':
             return action.response.slice();
-        case 'TOGGLE_BOARD':
-            return state.map(row => row.id === action.x ? boardRow(row, action) : row);
+        case 'TOGGLE_BOARD_SUCCESS':
+            return state.map(row => row.id === action.response.x ? boardRow(row, action) : row);
         case 'NEW_BOARD':
             return newBoard();
         default:
@@ -44,10 +44,24 @@ export const board = (state = [], action) => {
 
 const isFetching = (state = false, action) => {
     switch (action.type) {
-        case 'RECEIVE_BOARD':
+        case 'FETCH_BOARD_SUCCESS':
+        case 'FETCH_BOARD_FAILURE':
             return false;
-        case 'REQUEST_BOARD':
+        case 'FETCH_BOARD_REQUEST':
             return true;
+        default:
+            return state;
+    }
+};
+
+
+const errorMessage = (state = null, action) => {
+    switch (action.type) {
+        case 'FETCH_BOARD_FAILURE':
+            return action.message;
+        case 'FETCH_BOARD_SUCCESS':
+        case 'FETCH_BOARD_REQUEST':
+            return null;
         default:
             return state;
     }
@@ -55,9 +69,12 @@ const isFetching = (state = false, action) => {
 
 export const getIsFetching = state => state.isFetching;
 
+export const getErrorMessage = state => state.errorMessage;
+
 const boardReducers = combineReducers({
     data: board,
-    isFetching
+    isFetching,
+    errorMessage
 });
 
 export default boardReducers
