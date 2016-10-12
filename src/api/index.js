@@ -14,7 +14,7 @@ const createFakeDatabase = () => ({
 
 let fakeDatabase = createFakeDatabase();
 
-const latency = 150;
+const latency = 1500;
 const delay = (ms) =>
     new Promise(resolve => setTimeout(resolve, ms));
 
