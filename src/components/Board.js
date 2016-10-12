@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Cell from './Cell'
 import * as actions from '../actions'
-import { getIsFetching, getErrorMessage } from '../reducers'
+import { getIsBoardFetching, getCellFetching, getErrorMessage } from '../reducers'
 import FetchError from '../components/FetchError'
 
 class Board extends Component {
@@ -16,9 +16,14 @@ class Board extends Component {
     }
 
     render() {
-        const {board, player, winner, toggleBoard, isFetching, errorMessage} = this.props;
+        const {board, player, winner, toggleCell, isFetching, cellFetching, errorMessage} = this.props;
         if (isFetching && !board.length) {
-            return <p>Loading...</p>
+            return <div>
+                    <span className="fa-stack fa-lg">
+                        <i className="fa fa-circle-o-notch fa-spin fa-lg"></i>
+                    </span>
+                    Loading...
+                </div>;
         }
         if (errorMessage && !board.length) {
             return <FetchError
@@ -30,8 +35,11 @@ class Board extends Component {
             <div className="board"> {
                 board.map(row =>
                     row.items.map( cell =>
-                        <Cell key={cell.id} readOnly={cell.value !== '' || winner !== ''} text={cell.value} player={player}
-                              onClick={() => toggleBoard(row.id, cell.id, player)} />))
+                        <Cell key={cell.id}
+                              readOnly={cell.value !== '' || winner !== '' || cellFetching.isFetching}
+                              fetching={cell.id === cellFetching.y && row.id === cellFetching.x}
+                              text={cell.value} player={player}
+                              onClick={() => toggleCell(row.id, cell.id, player)} />))
             }
             </div>
         );
@@ -42,7 +50,8 @@ const mapStateToProps = (state) => ({
     board: state.board.data,
     player: state.player,
     winner: state.winner,
-    isFetching: getIsFetching(state),
+    isFetching: getIsBoardFetching(state),
+    cellFetching: getCellFetching(state),
     errorMessage: getErrorMessage(state)
 });
 

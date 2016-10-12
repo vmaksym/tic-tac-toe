@@ -9,8 +9,11 @@ const makeRootReducer = () => combineReducers({
     winner
 });
 
-export const getIsFetching = (state) =>
-    fromBoard.getIsFetching(state.board);
+export const getIsBoardFetching = (state) =>
+    fromBoard.getIsBoardFetching(state.board);
+
+export const getCellFetching = (state) =>
+    fromBoard.getCellFetching(state.board);
 
 export const getErrorMessage = (state) =>
     fromBoard.getErrorMessage(state.board);

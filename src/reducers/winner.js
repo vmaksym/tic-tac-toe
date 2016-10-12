@@ -1,9 +1,8 @@
 const winner = (state = '', action) => {
     switch (action.type) {
-        case 'TOGGLE_BOARD_SUCCESS':
+        case 'TOGGLE_CELL_SUCCESS':
+        case 'FETCH_GAME_SUCCESS':
             return action.response.winner;
-        case 'NEW_BOARD':
-            return '';
         default:
             return state;
     }
